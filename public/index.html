@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agencia de Talentos PR | Convocatoria</title>
+    <style>
+        :root {
+            --bg-principal: #0f172a;
+            --bg-tarjeta: #1e293b;
+            --morado-acento: #8b5cf6;
+            --morado-hover: #7c3aed;
+            --texto-blanco: #ffffff;
+            --texto-gris: #94a3b8;
+            --verde-exito: #22c55e;
+            --rojo-error: #ef4444;
+            --amarillo-warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-principal);
+            color: var(--texto-blanco);
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .contenedor {
+            background-color: var(--bg-tarjeta);
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .badge-gratis {
+            background-color: var(--verde-exito);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin: 0 0 10px 0;
+            color: var(--texto-blanco);
+        }
+
+        .descripcion {
+            color: var(--texto-gris);
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        .grupo-campo {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+
+        .requerido {
+            color: var(--rojo-error);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #475569;
+            background-color: #0f172a;
+            color: white;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--morado-acento);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .grupo-checkboxes {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-item input {
+            width: auto;
+            margin: 0;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .grupo-legal {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .grupo-legal input {
+            width: auto;
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+
+        .grupo-legal label {
+            font-size: 12px;
+            color: var(--texto-gris);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--morado-acento);
+            border: none;
+            color: white;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--morado-hover);
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background-color: #64748b;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        button .loader {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .mensaje {
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .mensaje.exito {
+            display: block;
+            background-color: rgba(34, 197, 94, 0.1);
+            border: 1px solid var(--verde-exito);
+            color: #86efac;
+        }
+
+        .mensaje.error {
+            display: block;
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--rojo-error);
+            color: #fca5a5;
+        }
+
+        .mensaje.warning {
+            display: block;
+            background-color: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--amarillo-warning);
+            color: #fcd34d;
+        }
+
+        .error-field {
+            border-color: var(--rojo-error) !important;
+        }
+
+        .campo-error {
+            color: var(--rojo-error);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .secciones-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #475569;
+        }
+
+        .tab {
+            padding: 10px 0;
+            border: none;
+            background: none;
+            color: var(--texto-gris);
+            cursor: pointer;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+            flex: 1;
+        }
+
+        .tab.activo {
+            color: var(--morado-acento);
+            border-bottom-color: var(--morado-acento);
+        }
+
+        .tab-contenido {
+            display: none;
+        }
+
+        .tab-contenido.activo {
+            display: block;
+        }
+
+        .progreso {
+            width: 100%;
+            height: 4px;
+            background-color: #475569;
+            border-radius: 2px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progreso-bar {
+            height: 100%;
+            background-color: var(--morado-acento);
+            transition: width 0.3s;
+        }
+
+        @media (max-width: 600px) {
+            .contenedor {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .secciones-tabs {
+                flex-direction: column;
+            }
+
+            .tab {
+                border-bottom: none;
+                border-left: 3px solid transparent;
+                padding-left: 10px;
+            }
+
+            .tab.activo {
+                border-left-color: var(--morado-acento);
+                border-bottom: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="contenedor">
+        <div class="header">
+            <span class="badge-gratis">Inscripción Gratis</span>
+            <h1>🎬 Únete a la Agencia de Artistas PR</h1>
+            <p class="descripcion">Buscamos nuevos talentos para nuestros próximos proyectos de producción audiovisual en Puerto Rico. Llena el formulario para postularte.</p>
+        </div>
+
+        <div class="progreso">
+            <div class="progreso-bar" id="progresoBar"></div>
+        </div>
+
+        <div id="mensajeResultado" class="mensaje"></div>
+
+        <form id="formularioTalento" novalidate>
+            <!-- SECCIÓN 1: INFORMACIÓN BÁSICA -->
+            <div class="secciones-tabs">
+                <button type="button" class="tab activo" onclick="cambiarTab(0)">Información</button>
+                <button type="button" class="tab" onclick="cambiarTab(1)">Detalles</button>
+                <button type="button" class="tab" onclick="cambiarTab(2)">Confirmación</button>
+            </div>
+
+            <!-- TAB 1: Información Básica -->
+            <div class="tab-contenido activo">
+                <div class="grupo-campo">
+                    <label for="nombre">Nombre Completo <span class="requerido">*</span></label>
+                    <input type="text" id="nombre" name="nombre" required placeholder="Ej. Andrea Ríos">
+                    <div class="campo-error" id="error-nombre"></div>
+                </div>
+
+                <div class="grupo-campo">
+                    <label for="email">Correo Electrónico <span class="requerido">*</span></label>
+                    <input type="email" id="email" name="email" required placeholder="tu@email.com">
+                    <div class="campo-error" id="error-email"></div>
+                </div>
+
+                <div class="grupo-campo">
+                    <label for="telefono">Teléfono</label>
+                    <input type="tel" id="telefono" name="telefono" placeholder="+1-787-555-0123">
+                    <div class="campo-error" id="error-telefono"></div>
+                </div>
+
+                <div class="grupo-campo">
+                    <label for="fecha_nacimiento">Fecha de Nacimiento <span class="requerido">*</span></label>
+                    <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
+                    <div class="campo-error" id="error-fecha_nacimiento"></div>
+                </div>
+            </div>
+
+            <!-- TAB 2: Detalles Profesionales -->
+            <div class="tab-contenido">
+                <div class="grupo-campo">
+                    <label for="residencia">¿Vives actualmente en Puerto Rico? <span class="requerido">*</span></label>
+                    <select id="residencia" name="residencia" required>
+                        <option value="">Selecciona una opción</option>
+                        <option value="SI">Sí, resido en Puerto Rico</option>
+                        <option value="NO">No</option>
+                    </select>
+                    <div class="campo-error" id="error-residencia"></div>
+                </div>
+
+                <div class="grupo-campo">
+                    <label for="experiencia">Nivel de Experiencia</label>
+                    <select id="experiencia" name="experiencia">
+                        <option value="Principiante">Principiante</option>
+                        <option value="Intermedio">Intermedio</option>
+                        <option value="Avanzado">Avanzado</option>
+                        <option value="Profesional">Profesional</option>
+                    </select>
+                </div>
+
+                <div class="grupo-campo">
+                    <label>Especialización <span class="requerido">*</span></label>
+                    <div class="grupo-checkboxes">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="espec-actuacion" name="especializacion" value="Actuación">
+                            <label for="espec-actuacion">Actuación</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="espec-musica" name="especializacion" value="Música">
+                            <label for="espec-musica">Música</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="espec-modelaje" name="especializacion" value="Modelaje">
+                            <label for="espec-modelaje">Modelaje</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="espec-danza" name="especializacion" value="Danza">
+                            <label for="espec-danza">Danza</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="espec-produccion" name="especializacion" value="Producción">
+                            <label for="espec-produccion">Producción</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="espec-otro" name="especializacion" value="Otro">
+                            <label for="espec-otro">Otro</label>
+                        </div>
+                    </div>
+                    <div class="campo-error" id="error-especializacion"></div>
+                </div>
+
+                <div class="grupo-campo">
+                    <label for="biografia">Biografía o Descripción Personal</label>
+                    <textarea id="biografia" name="biografia" placeholder="Cuéntanos un poco sobre ti..."></textarea>
+                    <div class="campo-error" id="error-biografia"></div>
+                </div>
+            </div>
+
+            <!-- TAB 3: Confirmación y Links -->
+            <div class="tab-contenido">
+                <div class="grupo-campo">
+                    <label for="fotos_url">Enlace a tus Fotos Profesionales <span class="requerido">*</span></label>
+                    <input type="url" id="fotos_url" name="fotos_url" required placeholder="https://drive.google.com/... (Link público)">
+                    <div class="campo-error" id="error-fotos_url"></div>
+                    <small style="color: var(--texto-gris); display: block; margin-top: 8px;">💡 Puedes usar Google Drive, Dropbox, Imgur o tu portafolio personal</small>
+                </div>
+
+                <div class="grupo-legal">
+                    <input type="checkbox" id="legal" name="acepta_terminos" required>
+                    <label for="legal">Confirmo que soy mayor de 18 años, que resido en Puerto Rico y que las fotos adjuntas son profesionales. Acepto los <strong>Términos y Condiciones</strong> y la <strong>Política de Privacidad</strong> de la productora. <span class="requerido">*</span></label>
+                </div>
+                <div class="campo-error" id="error-legal"></div>
+
+                <div class="grupo-legal">
+                    <input type="checkbox" id="privacy" name="acepta_privacidad" required>
+                    <label for="privacy">Autorizo a la Agencia de Talentos PR a contactarme sobre oportunidades y proyectos. <span class="requerido">*</span></label>
+                </div>
+                <div class="campo-error" id="error-privacy"></div>
+            </div>
+
+            <button type="submit" id="submitBtn">
+                <span id="btnText">Enviar mi Postulación</span>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api'; // Cambiar según tu configuración
+        let tabActual = 0;
+        const totalTabs = 3;
+
+        /**
+         * Cambiar entre tabs
+         */
+        function cambiarTab(tabIndex) {
+            if (validarTabActual()) {
+                tabActual = tabIndex;
+                actualizarVistaTab();
+            }
+        }
+
+        /**
+         * Actualizar vista del tab
+         */
+        function actualizarVistaTab() {
+            // Actualizar tabs activos
+            document.querySelectorAll('.tab').forEach((tab, index) => {
+                tab.classList.toggle('activo', index === tabActual);
+            });
+
+            // Actualizar contenido activo
+            document.querySelectorAll('.tab-contenido').forEach((contenido, index) => {
+                contenido.classList.toggle('activo', index === tabActual);
+            });
+
+            // Actualizar barra de progreso
+            const progreso = ((tabActual + 1) / totalTabs) * 100;
+            document.getElementById('progresoBar').style.width = progreso + '%';
+        }
+
+        /**
+         * Validar tab actual
+         */
+        function validarTabActual() {
+            const campos = obtenerCamposTab(tabActual);
+            let valido = true;
+
+            campos.forEach(campo => {
+                const error = validarCampo(campo);
+                if (error) valido = false;
+            });
+
+            return valido;
+        }
+
+        /**
+         * Obtener campos del tab
+         */
+        function obtenerCamposTab(tabIndex) {
+            const tabContenido = document.querySelectorAll('.tab-contenido')[tabIndex];
+            return tabContenido.querySelectorAll('input, select, textarea');
+        }
+
+        /**
+         * Validar campo individual
+         */
+        function validarCampo(campo) {
+            const nombre = campo.name;
+            const valor = campo.value.trim();
+            let error = '';
+
+            // Campos requeridos
+            if (campo.hasAttribute('required') && !valor) {
+                error = 'Este campo es requerido';
+            }
+            // Validación de email
+            else if (nombre === 'email' && valor) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(valor)) {
+                    error = 'Email inválido';
+                }
+            }
+            // Validación de teléfono
+            else if (nombre === 'telefono' && valor) {
+                const phoneRegex = /^[\d\s\-\+\(\)]{7,}$/;
+                if (!phoneRegex.test(valor)) {
+                    error = 'Teléfono inválido';
+                }
+            }
+            // Validación de URL
+            else if (nombre === 'fotos_url' && valor) {
+                try {
+                    new URL(valor);
+                } catch {
+                    error = 'URL inválida';
+                }
+            }
+
+            // Mostrar/ocultar error
+            const errorDiv = document.getElementById(`error-${nombre}`);
+            if (errorDiv) {
+                if (error) {
+                    errorDiv.textContent = error;
+                    campo.classList.add('error-field');
+                } else {
+                    errorDiv.textContent = '';
+                    campo.classList.remove('error-field');
+                }
+            }
+
+            return error;
+        }
+
+        /**
+         * Recopilar datos especializacion
+         */
+        function obtenerEspecializaciones() {
+            return Array.from(document.querySelectorAll('input[name="especializacion"]:checked'))
+                .map(checkbox => checkbox.value);
+        }
+
+        /**
+         * Mostrar mensaje
+         */
+        function mostrarMensaje(tipo, texto) {
+            const div = document.getElementById('mensajeResultado');
+            div.className = 'mensaje ' + tipo;
+            div.innerHTML = tipo === 'exito' 
+                ? '✅ ' + texto 
+                : tipo === 'error' 
+                ? '❌ ' + texto 
+                : '⚠️ ' + texto;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /**
+         * Submit del formulario
+         */
+        document.getElementById('formularioTalento').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Validar todos los campos
+            let valido = true;
+            document.querySelectorAll('input, select, textarea').forEach(campo => {
+                if (validarCampo(campo)) valido = false;
+            });
+
+            if (!valido) {
+                mostrarMensaje('error', 'Por favor, completa todos los campos correctamente');
+                return;
+            }
+
+            // Recopilar datos
+            const datosFormulario = {
+                nombre: document.getElementById('nombre').value.trim(),
+                email: document.getElementById('email').value.toLowerCase().trim(),
+                fecha_nacimiento: document.getElementById('fecha_nacimiento').value,
+                residencia: document.getElementById('residencia').value,
+                fotos_url: document.getElementById('fotos_url').value.trim(),
+                telefono: document.getElementById('telefono').value.trim(),
+                biografia: document.getElementById('biografia').value.trim(),
+                experiencia: document.getElementById('experiencia').value,
+                especializacion: obtenerEspecializaciones(),
+                acepta_terminos: document.getElementById('legal').checked,
+                acepta_privacidad: document.getElementById('privacy').checked
+            };
+
+            // Deshabilitar botón y mostrar loader
+            const btn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            btn.disabled = true;
+            btnText.innerHTML = '<span class="loader"></span>Enviando...';
+
+            try {
+                const response = await fetch(`${API_URL}/applications`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(datosFormulario)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    mostrarMensaje('exito', '¡Solicitud enviada exitosamente! Te enviaremos un email de confirmación.');
+                    document.getElementById('formularioTalento').reset();
+                    tabActual = 0;
+                    actualizarVistaTab();
+                } else {
+                    mostrarMensaje('error', data.message || 'Error al enviar la solicitud');
+                    
+                    // Mostrar errores específicos de campos
+                    if (data.errors) {
+                        Object.entries(data.errors).forEach(([campo, mensaje]) => {
+                            const errorDiv = document.getElementById(`error-${campo}`);
+                            if (errorDiv) {
+                                errorDiv.textContent = mensaje;
+                            }
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarMensaje('error', 'Error de conexión. Por favor, intenta más tarde.');
+            } finally {
+                btn.disabled = false;
+                btnText.textContent = 'Enviar mi Postulación';
+            }
+        });
+
+        // Validar campos en tiempo real
+        document.querySelectorAll('input, select, textarea').forEach(campo => {
+            campo.addEventListener('blur', function() {
+                validarCampo(this);
+            });
+        });
+
+        // Inicializar
+        window.addEventListener('load', () => {
+            actualizarVistaTab();
+        });
+    </script>
+</body>
+</html>
